@@ -2,8 +2,8 @@
 
 import { useCallback, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { AiFillGithub } from "react-icons/ai";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
@@ -23,7 +23,7 @@ const LoginModal = () => {
     password: "",
   });
 
-  const onSubmit = () => {};
+  const onSubmit = () => { };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [e.target.id]: e.target.value });
@@ -64,14 +64,14 @@ const LoginModal = () => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => {}}
+        onClick={() => {signIn("google");loginModal.onClose;}}
       />
       <div
         className="
       text-neutral-500 text-center mt-4 font-light"
       >
         <p>
-          First time using Airbnb?
+          First time using titipin?
           <span
             onClick={onToggle}
             className="
