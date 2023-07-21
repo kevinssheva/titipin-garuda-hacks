@@ -7,7 +7,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import Productbox from "../(site)/components/landing/Productbox";
 import { useState } from "react";
 
-const productDetail = () => {
+const ProductDetail = () => {
   const rekomen = (
     <Productbox
       image="/explore/pria/baju.jpg"
@@ -20,14 +20,14 @@ const productDetail = () => {
   );
 
   const stok = 10; //dummy
-  const [jumlah, setJumlah] = useState(1);
+  const [jumlah, setJumlah] = useState(2);
 
   return (
-    <div className="flex flex-col items-center justify-center lg:items-start pl-24">
+    <div className="flex flex-col items-center justify-center lg:items-start pl-24 py-16">
       <div className="container py-16 px-5 w-full max-w-6xl">
         <div className="mb-2 text-lg lg:col-span-2">
           <span className="cursor-pointer text-mariner-500" onClick={() => {}}>
-            Men's Fashion
+            {"Men's"} Fashion
           </span>
           {" > "}
           <span className="cursor-pointer" onClick={() => {}}>
@@ -132,7 +132,7 @@ const productDetail = () => {
 
         <h1 className="font-semibold text-xl mb-3">Related Products</h1>
 
-        <div className="flex gap-8 md:overflow-x-hidden overflow-x-scroll">
+        <div className="flex gap-8">
           {Array.from({ length: 3 }).map((_, index) => (
             <div key={index}>{rekomen}</div>
           ))}
@@ -182,4 +182,4 @@ const productDetail = () => {
   );
 };
 
-export default productDetail;
+export default ProductDetail;
