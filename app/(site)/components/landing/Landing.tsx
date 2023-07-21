@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Categorylanding from "./Categorylanding";
 import Productbox from "./Productbox";
 
@@ -14,12 +15,29 @@ export default function Landing() {
   );
 
   return (
-    <div className="p-16">
-      <h1 className="font-semibold text-3xl mb-6 text-mariner-500">
+    <div className="p-24 lg:py-40 py-20">
+      <div className="lg:flex gap-6 justify-center mb-12 lg:mb-16 block">
+        <Image
+          src="/landing/promo1.jpg"
+          width={875}
+          height={500}
+          alt="promo1"
+          className="rounded-xl lg:w-[50%] mb-6 lg:mb-0"
+        />
+        <Image
+          src="/landing/promo2.jpg"
+          width={875}
+          height={500}
+          alt="promo1"
+          className="rounded-xl lg:w-[50%]"
+        />
+      </div>
+
+      <h1 className="font-semibold text-xl lg:text-3xl mb-6 text-mariner-500">
         Explore Your Needs
       </h1>
 
-      <div className="flex mb-28 justify-between gap-8 overflow-x-scroll lg:overflow-x-hidden">
+      <div className="flex mb-12 lg:mb-16 justify-between gap-8 overflow-x-scroll lg:overflow-x-hidden">
         <Categorylanding foto="landing/Men Fashion.svg" nama="Men Fashion" />
         <Categorylanding
           foto="landing/Women Fashion.svg"
@@ -35,7 +53,7 @@ export default function Landing() {
         <Categorylanding foto="landing/Books.svg" nama="Books" />
       </div>
 
-      <h1 className="font-semibold text-3xl mb-6 text-mariner-500">
+      <h1 className="font-semibold text-xl lg:text-3xl mb-6 text-mariner-500">
         Reccomended For You
       </h1>
 

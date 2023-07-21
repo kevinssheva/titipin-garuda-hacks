@@ -16,7 +16,7 @@ const Searchbar = () => {
         />
         <div className="peer-placeholder-shown:flex hidden absolute items-center gap-1 text-neutral-300 top-1/2 -translate-y-1/2 left-2">
           <FaSearch />
-          <label htmlFor="name" className="text-sm">
+          <label htmlFor="name" className="text-sm line-clamp-1">
             Search your product
           </label>
         </div>
