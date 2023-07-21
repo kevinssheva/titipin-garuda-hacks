@@ -17,9 +17,9 @@ export default function Explore() {
 
   return (
     <>
-      <h3 className="text-2xl font-light mb-12">Mens Fashion</h3>
+      <h3 className="text-2xl font-light mb-8">Mens Fashion</h3>
 
-      <h1 className="text-3xl mb-8">Jastip Mens Fashion</h1>
+      <h1 className="text-3xl mb-8 text-mariner-500 font-semibold">Jastip Mens Fashion</h1>
       <p className="font-light text-2xl mb-6">
         Yuk titip barang yang kamu mau!
       </p>
@@ -33,8 +33,8 @@ export default function Explore() {
       </div>
 
       <div className="flex gap-5">
-        <div className="mt-12 p-3 rounded-full border border-gray-400 w-44">
-          <select>
+        <div className="mt-12 p-3 rounded-full border border-mariner-500 w-44">
+          <select className="text-mariner-500">
             <option value="Men Fashion">Men Fashion</option>
             <option value="Women Fashion">Woman Fashion</option>
             <option value="Electronics">Electronics</option>
@@ -48,8 +48,8 @@ export default function Explore() {
           </select>
         </div>
 
-        <div className="mt-12 p-3 rounded-full border border-gray-400 w-52">
-          <select>
+        <div className="mt-12 p-3 rounded-full border border-mariner-500 w-52">
+          <select className="text-mariner-500">
             <option value="Best Match">Best Match</option>
             <option value="Newest">Newest</option>
             <option value="Harga-Tinggi">High To Low (Price)</option>
