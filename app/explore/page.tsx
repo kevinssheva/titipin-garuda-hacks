@@ -4,7 +4,6 @@ import Explore from "./component/Explore";
 export default function Explorepage() {
     return (
         <div className="p-16 py-32">
-            <Navbar />
             <Explore />
         </div>
     )
