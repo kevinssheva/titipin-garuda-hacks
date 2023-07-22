@@ -7,7 +7,7 @@ interface CategoryModalStore {
 }
 
 const useCategoryModal = create<CategoryModalStore>((set) => ({
-  isOpen: true,
+  isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
 }));

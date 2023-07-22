@@ -10,10 +10,12 @@ import Dropdown, {
 import Input from "@/app/components/Inputs/Input";
 import { Country } from "country-state-city";
 import toast from "react-hot-toast";
+import { CldUploadButton } from "next-cloudinary";
 
 export default function Sell() {
   const countries = Country.getAllCountries();
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  console.log(selectedFiles);
   const [category, setCategory] = useState({ value: "", code: "" });
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -25,21 +27,14 @@ export default function Sell() {
   });
   const [iserror, setIsError] = useState(false);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    if (files.length > 5) {
-      toast.error("Photos must be <= 5");
-      return;
+  const handleUpload = (result: any) => {
+    if (result.event === "success") {
+      setSelectedFiles((prevFiles) => {
+        return [...prevFiles, result.info.secure_url];
+      });
+    } else {
+      toast.error("Upload failed");
     }
-
-    setSelectedFiles(files);
-  };
-
-  const handleDeleteImage = (index: number) => {
-    setSelectedFiles((prevFiles) => {
-      // Create a new array excluding the file at the given index
-      return prevFiles.filter((_, i) => i !== index);
-    });
   };
 
   return (
@@ -51,9 +46,10 @@ export default function Sell() {
       <div className="block lg:flex gap-20">
         <div className="gap-2 lg:w-1/2">
           <div className="flex items-center justify-center w-full">
-            <label
-              htmlFor="dropzone-file"
-              className="flex flex-col items-center justify-center w-full h-64 border-2 border-mariner-500 border-dashed rounded-lg cursor-pointer bg-mariner-100 hover:bg-mariner-200"
+            <CldUploadButton
+              options={{ maxFiles: 5 }}
+              onUpload={handleUpload}
+              uploadPreset="qhnme8bz"
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <LuImagePlus className="w-10 h-10 text-mariner-400 mb-5" />
@@ -65,32 +61,23 @@ export default function Sell() {
                   SVG, PNG, JPG (MAX. 5 Photos)
                 </p>
               </div>
-              <input
-                id="dropzone-file"
-                type="file"
-                className="hidden"
-                multiple
-                onChange={handleFileChange}
-              />
-            </label>
+            </CldUploadButton>
           </div>
 
-          <div className="mt-4 flex flex-wrap justify-center">
-            {selectedFiles.map((file, index) => (
-              <div key={index} className="m-2 flex flex-row-reverse">
-                <RxCrossCircled
-                  className="w-5 h-5 text-white bg-black rounded-full cursor-pointer"
-                  onClick={() => handleDeleteImage(index)}
-                />
-                <Image
-                  src={URL.createObjectURL(file)}
-                  alt={`Uploaded file ${index + 1}`}
-                  width={160}
-                  height={160}
-                  className="w-16 h-16 lg:w-40 lg:h-40 object-cover rounded-md mt-4"
-                />
-              </div>
-            ))}
+          <div className="mt-4 flex flex-wrap justify-center gap-4">
+            {selectedFiles.map((url, index) => {
+              return (
+                <div key={index} className="w-24 aspect-square relative">
+                  <Image
+                    src={url}
+                    fill
+                    alt="product"
+                    className="object-cover"
+                  />
+                  ;
+                </div>
+              );
+            })}
           </div>
         </div>
 
