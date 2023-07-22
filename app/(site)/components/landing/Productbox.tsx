@@ -17,7 +17,7 @@ export default function Productbox(props: any) {
         <p className="text-gray-500 text-sm">{props.location}</p>
 
         <div className="flex items-center">
-          <p className="text-gray-500 text-sm">Stok : {props.sold <= 10? props.sold : props.sold + "+"}</p>
+          <p className="text-gray-500 text-sm">Sold : {props.sold <= 10 ? props.sold : props.sold + "+"}</p>
         </div>
       </div>
     </>

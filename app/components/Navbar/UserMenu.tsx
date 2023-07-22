@@ -5,7 +5,6 @@ import { IoChevronDown, IoExitOutline } from "react-icons/io5";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
-import { useState } from "react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import baju from "../../../public/baju.jpg";

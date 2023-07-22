@@ -11,12 +11,20 @@ import Input from "@/app/components/Inputs/Input";
 import { Country } from "country-state-city";
 import toast from "react-hot-toast";
 import { CldUploadButton } from "next-cloudinary";
+import { useRouter } from "next/navigation";
 
-export default function Sell() {
+interface User {
+  name: string;
+  email: string;
+  image: string;
+  id: string;
+}
+
+export default function Sell({ user }: { user: User }) {
   const countries = Country.getAllCountries();
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
-  console.log(selectedFiles);
   const [category, setCategory] = useState({ value: "", code: "" });
+  const [subCategory, setSubcategory] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
@@ -26,6 +34,7 @@ export default function Sell() {
     value: "",
   });
   const [iserror, setIsError] = useState(false);
+  const router = useRouter();
 
   const handleUpload = (result: any) => {
     if (result.event === "success") {
@@ -36,6 +45,43 @@ export default function Sell() {
       toast.error("Upload failed");
     }
   };
+
+  const handleSubmit = async () => {
+    const data = {
+      category: category.value,
+      subCategory,
+      estimatedTime: (new Date(Date.now() + 11 * 24 * 60 * 60 * 1000)).toISOString(),
+      title: name,
+      price: parseInt(price),
+      stock: parseInt(stock),
+      description,
+      location: location.value,
+      imageURLs: selectedFiles,
+      authorId: user.id,
+    };
+
+    try {
+      const res = await fetch(`/api/v1/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        setIsError(true);
+        toast.error("Failed to upload product");
+      } else {
+        toast.success("Product uploaded successfully");
+        setTimeout(() => {
+          router.push("/profile");
+        }, 1500);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div>
@@ -86,15 +132,25 @@ export default function Sell() {
             label="Category"
             value={category}
             options={[
-              { value: "Fashion", code: "1" },
-              { value: "Electronic", code: "2" },
-              { value: "Furniture", code: "3" },
-              { value: "Handmade", code: "4" },
-              { value: "Toys", code: "5" },
-              { value: "Shoes", code: "6" },
-              { value: "Others", code: "11" },
+              { value: "Men Fashion", code: "1" },
+              { value: "Women Fashion", code: "2" },
+              { value: "Food and Beverages", code: "3" },
+              { value: "Electronic", code: "4" },
+              { value: "Sports", code: "5" },
+              { value: "Arts and Crafts", code: "6" },
+              { value: "Toys", code: "7" },
+              { value: "Shoes", code: "8" },
+              { value: "Books", code: "9" },
             ]}
             onChange={(newValue: DropdownOptionProps) => setCategory(newValue)}
+          />
+
+          <Input
+            id="subCategory"
+            label="subCategory"
+            required
+            value={subCategory}
+            onChange={(e) => setSubcategory(e.target.value)}
           />
 
           <Input
@@ -146,7 +202,7 @@ export default function Sell() {
           />
 
           <button className="text-mariner-500 border border-mariner-500 hover:bg-mariner-500 p-2 w-28 self-center rounded-2xl">
-            <p className="hover:text-white font-semibold">Post Now</p>
+            <p className="hover:text-white font-semibold" onClick={handleSubmit}>Post Now</p>
           </button>
         </div>
       </div>

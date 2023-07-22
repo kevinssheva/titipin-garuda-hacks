@@ -1,19 +1,46 @@
+"use client"
 import Productbox from "@/app/(site)/components/landing/Productbox";
 import Image from "next/image";
 import { AiFillStar } from "react-icons/ai";
-import { Country, State, City } from "country-state-city";
+import { useRouter } from "next/navigation";
+import useSWR from "swr";
+import fetcher from "@/app/lib/fetcher";
 
-export default function Profile() {
-  const productBoxContent = (
-    <Productbox
-      image="landing/Toys.svg"
-      name="Toys"
-      price="90.000"
-      location="Singapore"
-      rating="4.4"
-      sold="10"
-    />
-  );
+interface User {
+  name: string;
+  email: string;
+  image: string;
+  id: string;
+}
+
+interface Product {
+  id: string;
+  imageURLs: string[];
+  title: string;
+  price: number;
+  location: string;
+  rating: string;
+  sold: number;
+  transactions: any[];
+}
+
+function formatNumber(number: number) {
+  // Convert the number to string
+  const numberString = String(number);
+
+  const [integerPart, decimalPart = ''] = numberString.split('.');
+
+  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+  const formattedNumber = decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+
+  return formattedNumber;
+}
+
+export default function Profile({ user }: { user: User }) {
+  const { data: usersData } = useSWR(process.env.NEXT_PUBLIC_WEB_URL + `/api/v1/users/${user?.id}`, fetcher);
+  const { data: productsData } = useSWR(process.env.NEXT_PUBLIC_WEB_URL + `/api/v1/all-post/${user?.id}`, fetcher);
+  const router = useRouter();
 
   return (
     <div className="relative pt-20">
@@ -29,21 +56,27 @@ export default function Profile() {
               className="object-cover object-center"
             />
           </div>
-          <h1 className="text-3xl mt-2 font-light">Mochamad Syahrial</h1>
+          <h1 className="text-3xl mt-2 font-light">{usersData?.fullName}</h1>
 
           <div className="flex gap-4 mt-4">
             <AiFillStar className="text-yellow-500 text-2xl" />
             <p>4.4 dari 5.0</p>
           </div>
 
-          <p className="text-gray-500 mt-4">
-            Bekasi, Indonesia <br /> Joined 2015{" "}
-          </p>
+          {usersData ? (
+            <>
+              <p className="text-gray-500 mt-4">
+                {usersData?.city + ", " + usersData?.country} <br /> Joined {usersData?.createdAt.split("T")[0].split("-")[0]}{" "}
+              </p>
 
-          <div className="flex gap-10 text-gray-500 mt-4">
-            <p>0 followers</p>
-            <p>0 following</p>
-          </div>
+              <div className="flex gap-10 text-gray-500 mt-4">
+                <p>{usersData?.followedByIDs?.length || ""} followers</p>
+                <p>{usersData?.followingIDs?.length || ""} following</p>
+              </div>
+            </>
+          ) : (
+            <div>Loading...</div>
+          )}
         </div>
 
         <div className="gap-4 mt-12">
@@ -55,9 +88,21 @@ export default function Profile() {
           </div>
 
           <div className="flex flex-wrap gap-8 justify-center">
-            {Array.from({ length: 14 }).map((_, index) => (
-              <div key={index}>{productBoxContent}</div>
-            ))}
+            {productsData ? productsData.map((value: Product, index: number) => (
+              <div key={index} onClick={() => { router.push(`/product/${value?.id}`) }}>
+                <Productbox
+                  id={value?.id}
+                  image={value?.imageURLs[0]}
+                  name={value?.title}
+                  price={formatNumber(value?.price)}
+                  location={value?.location}
+                  rating="4.4"
+                  sold={value?.transactions.length}
+                />
+              </div>
+            )) : (
+              <div>Loading...</div>
+            )}
           </div>
         </div>
       </div>

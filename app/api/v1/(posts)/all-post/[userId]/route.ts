@@ -6,6 +6,9 @@ export async function GET(req: NextRequest, { params }: { params: { userId: stri
         const { userId } = params;
 
         const posts = await prisma.post.findMany({
+            include: {
+                transactions: true,
+            },
             where: {
                 authorId: userId
             }
