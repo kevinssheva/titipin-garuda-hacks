@@ -66,7 +66,7 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(post);
+    return NextResponse.json({ message: "Successfully updating post." });
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });
   }

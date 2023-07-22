@@ -66,12 +66,12 @@ export default function Profile({ user }: { user: User }) {
           {usersData ? (
             <>
               <p className="text-gray-500 mt-4">
-                {usersData?.city + ", " + usersData?.country} <br /> Joined {usersData?.createdAt.split("T")[0].split("-")[0]}{" "}
+                {usersData?.city || "Semarang" + ", " + (usersData?.country.length !== 0 ? usersData?.country : "Indonesia")} <br /> Joined {usersData?.createdAt.split("T")[0].split("-")[0]}{" "}
               </p>
 
               <div className="flex gap-10 text-gray-500 mt-4">
-                <p>{usersData?.followedByIDs?.length || ""} followers</p>
-                <p>{usersData?.followingIDs?.length || ""} following</p>
+                <p>{usersData?.followedByIDs?.length || 0} followers</p>
+                <p>{usersData?.followingIDs?.length || 0} following</p>
               </div>
             </>
           ) : (
@@ -88,7 +88,7 @@ export default function Profile({ user }: { user: User }) {
           </div>
 
           <div className="flex flex-wrap gap-8 justify-center">
-            {productsData ? productsData.map((value: Product, index: number) => (
+            {productsData ? productsData.length > 0 ? productsData.map((value: Product, index: number) => (
               <div key={index} onClick={() => { router.push(`/product/${value?.id}`) }}>
                 <Productbox
                   id={value?.id}
@@ -101,6 +101,8 @@ export default function Profile({ user }: { user: User }) {
                 />
               </div>
             )) : (
+              <div className="">Kamu belum memiliki titipan.</div>
+            ) : (
               <div>Loading...</div>
             )}
           </div>
