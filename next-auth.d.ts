@@ -8,6 +8,7 @@ declare module "next-auth" {
     user: {
       wishlist: string[];
       id: string;
+      categoryPilihan: string[];
     } & DefaultSession["user"];
   }
 }

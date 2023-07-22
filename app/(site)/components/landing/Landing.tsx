@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Categorylanding from "./Categorylanding";
 import Productbox from "./Productbox";
+import { prisma } from "@/app/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/auth";
+import { Session } from "next-auth";
 
-export default function Landing() {
+export default async function Landing() {
   const productBoxContent = (
     <Productbox
       image="landing/Toys.svg"
@@ -13,6 +17,30 @@ export default function Landing() {
       sold="10"
     />
   );
+
+  // getserversession
+  const session = await getServerSession(authOptions) as Session;
+
+  const recommendation = async () => {
+    return await prisma.post.findMany({
+      where: {
+        category: {
+          in: session.user.categoryPilihan,
+        }
+      },
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        location: true,
+        stock: true,
+        imageURLs: true,
+      }
+    });
+  }
+
+  const recommendationProducts = await recommendation();
+
 
   return (
     <div className="p-24 lg:py-40 py-20">
@@ -58,8 +86,22 @@ export default function Landing() {
       </h1>
 
       <div className="flex flex-row flex-wrap items-center justify-center gap-8">
-        {Array.from({ length: 24 }).map((_, index) => (
+        {/* {Array.from({ length: 24 }).map((_, index) => (
           <div key={index}>{productBoxContent}</div>
+        ))} */}
+        {recommendationProducts.map((product) => (
+          <div key={product.id}>
+            <Productbox
+              image={product.imageURLs[0]}
+              name={product.title}
+              price={product.price.toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0
+              })}
+              location={product.location}
+              sold={product.stock}
+            /></div>
         ))}
       </div>
 

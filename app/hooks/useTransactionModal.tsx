@@ -1,15 +1,16 @@
 import { create } from "zustand";
+import { TransactionCardProps } from "../transaction/components/TransactionCard";
 
 interface TransactionModalProps {
-  idOpened: string;
-  onOpen: (id: string) => void;
+  data: TransactionCardProps | null;
+  onOpen: (data: TransactionCardProps) => void;
   onClose: () => void;
 }
 
 const useTransactionModal = create<TransactionModalProps>((set) => ({
-  idOpened: "dddawd",
-  onOpen: (id) => set({ idOpened: id }),
-  onClose: () => set({ idOpened: "" }),
+  data: null,
+  onOpen: (data) => set({ data }),
+  onClose: () => set({ data: null }),
 }));
 
 export default useTransactionModal;
