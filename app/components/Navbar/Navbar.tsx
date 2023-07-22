@@ -4,7 +4,10 @@ import MobileNav from "./MobileNav";
 import UserMenu, { currentUserType } from "./UserMenu";
 import Link from "next/link";
 
-const Navbar = ({ currentUser }: { currentUser: currentUserType }) => {
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/auth";
+
+const Navbar = async ({ currentUser }: { currentUser: currentUserType }) => {
   return (
     <>
       <div className="fixed z-40 flex py-3 inset-x-0 top-0 shadow-xl px-5 md:px-10 items-center justify-center lg:justify-between bg-white">
