@@ -42,6 +42,7 @@ export const authOptions: NextAuthOptions = {
             name: createUser.fullName,
             image: createUser.profilePicture as string,
             wishlist: createUser.wishlist,
+            categoryPilihan: createUser.categoryPilihan
           };
         }
 
@@ -51,6 +52,7 @@ export const authOptions: NextAuthOptions = {
           name: user.fullName,
           image: user.profilePicture as string,
           wishlist: user.wishlist,
+          categoryPilihan: user.categoryPilihan
         };
     }
     }),
@@ -89,6 +91,7 @@ export const authOptions: NextAuthOptions = {
           name: user.fullName,
           image: user.profilePicture as string,
           wishlist: user.wishlist,
+          categoryPilihan: user.categoryPilihan
         };
       },
     }),
@@ -111,6 +114,7 @@ export const authOptions: NextAuthOptions = {
               ...session.user,
               id: user.id,
               wishlist: user.wishlist,
+              categoryPilihan: user.categoryPilihan
             },
           };
 

@@ -4,16 +4,17 @@ import { AiFillStar } from "react-icons/ai";
 export default function Productbox(props: any) {
   return (
     <>
-      <div className="flex flex-col w-48 rounded-xl p-3 shadow-md hover:shadow-xl cursor-pointer">
+      <div className="flex flex-col w-48 aspect-[3/5] rounded-xl p-3 shadow-md hover:shadow-xl cursor-pointer">
+        <div className="relative h-1/2 overflow-hidden w-full rounded-lg mb-2">
         <Image
           src={props.image}
-          width={250}
-          height={250}
+          fill
           alt="Category Name"
-          className="rounded-2xl mb-4"
+          className="object-cover"
         />
-        <p className="text-base">{props.name}</p>
-        <p className="font-bold">Rp {props.price}</p>
+        </div>
+        <p className="text-base line-clamp-3">{props.name}</p>
+        <p className="font-bold">{props.price}</p>
         <p className="text-gray-500 text-sm">{props.location}</p>
 
         <div className="flex items-center">
