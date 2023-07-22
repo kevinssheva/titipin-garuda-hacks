@@ -9,21 +9,26 @@ import Dropdown, {
 } from "@/app/components/Inputs/Dropdown";
 import Input from "@/app/components/Inputs/Input";
 import { Country } from "country-state-city";
+import toast from "react-hot-toast";
 
 export default function Sell() {
   const countries = Country.getAllCountries();
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [category, setCategory] = useState({ value: "", code: "" });
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
   const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState({
+    code: "",
+    value: "",
+  });
+  const [iserror, setIsError] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     if (files.length > 5) {
-      window.alert("You can upload a maximum of 5 files.");
+      toast.error("Photos must be <= 5");
       return;
     }
 

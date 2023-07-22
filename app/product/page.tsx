@@ -130,7 +130,7 @@ const ProductDetail = () => {
                   </div>
                 </div>
 
-                <div className="w-1/6 mt-4 lg:mt-0">
+                <div className="w-4/5 sm:w-1/6 mt-4 lg:mt-0">
                   <Button disabled={false} label="Follow" onClick={() => {}} />
                 </div>
               </div>

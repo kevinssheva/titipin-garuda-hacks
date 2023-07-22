@@ -8,6 +8,7 @@ import RegisterModal from "./components/Modals/RegisterModal";
 import { useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./lib/auth";
+import ToasterContext from "./context/ToasterContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -28,16 +29,18 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-      <NextAuthProvider>
-        <LoginModal />
-        <RegisterModal />
-        <Navbar
-          currentUser={{
-            userName: session?.user?.name as string,
-            image: session?.user?.image as string,
-          }}
-        />
-        {children}
+        <NextAuthProvider>
+          <ToasterContext />
+
+          <LoginModal />
+          <RegisterModal />
+          <Navbar
+            currentUser={{
+              userName: session?.user?.name as string,
+              image: session?.user?.image as string,
+            }}
+          />
+          {children}
         </NextAuthProvider>
       </body>
     </html>
