@@ -1,5 +1,6 @@
-import Button from "@/app/components/Button";
-import Link from "next/link";
+"use client";
+
+import useTransactionModal from "@/app/hooks/useTransactionModal";
 
 export interface TransactionCardProps {
   id: string;
@@ -22,6 +23,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
   totalPrice,
   status,
 }) => {
+  const transactionModal = useTransactionModal();
   return (
     <div className="w-full bg-white drop-shadow-md rounded-lg flex flex-col px-3 py-5 gap-5">
       <div className="flex items-center gap-2">
@@ -43,11 +45,14 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
       </div>
       <div className="flex">
         <div className="w-1/4 ml-auto">
-          <Link href={`/transaction/${id}`}>
-            <div className="flex items-center justify-center py-2 rounded-md w-full bg-mariner-500 font-bold text-white">
-              Lihat Detail
-            </div>
-          </Link>
+          <div
+            className="cursor-pointer flex items-center justify-center py-2 rounded-md w-full bg-mariner-500 font-bold text-white"
+            onClick={() => {
+              transactionModal.onOpen(id);
+            }}
+          >
+            Lihat Detail
+          </div>
         </div>
       </div>
     </div>
