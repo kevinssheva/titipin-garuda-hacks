@@ -27,7 +27,7 @@ const Navbar = ({ currentUser }: { currentUser: currentUserType }) => {
         </div>
         <UserMenu currentUser={currentUser} />
       </div>
-      <div className="lg:hidden fixed bottom-0 inset-x-0 py-3 bg-neutral-100 border-t-neutral-300 border-[1px]">
+      <div className="z-50 lg:hidden fixed bottom-0 inset-x-0 py-3 bg-neutral-100 border-t-neutral-300 border-[1px]">
         <MobileNav />
       </div>
     </>
