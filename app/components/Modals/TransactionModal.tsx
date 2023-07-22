@@ -3,18 +3,18 @@
 import useTransactionModal from "@/app/hooks/useTransactionModal";
 import Modal from "./Modal";
 import { TransactionCardProps } from "@/app/transaction/components/TransactionCard";
-import { format } from 'date-fns';
-import idLocale from 'date-fns/locale/id';
+import { format } from "date-fns";
+import idLocale from "date-fns/locale/id";
 import Image from "next/image";
 
 const TransactionModal = () => {
   const transactionModal = useTransactionModal();
-  const data: TransactionCardProps = transactionModal.data;
+  const data = transactionModal.data;
 
-  const date = new Date(data?.updatedAt)
+  const date = new Date(data?.updatedAt as Date);
   const year = date.getFullYear();
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
 
   const formattedDateString = `${year}${month}${day}`;
   let time = null;
@@ -22,7 +22,7 @@ const TransactionModal = () => {
     time = format(date, "d MMMM yyyy, HH:mm", { locale: idLocale });
   }
 
-  if(!data) {
+  if (!data) {
     return null;
   }
   const bodyContent = (
@@ -57,14 +57,13 @@ const TransactionModal = () => {
             />
           </div>
           <div className="flex-1 border-r-[1px] border-neutral-300 flex flex-col justify-center">
-            <h1 className="font-semibold text-sm">
-              {data?.post.title}
-            </h1>
+            <h1 className="font-semibold text-sm">{data?.post.title}</h1>
             <p className="font-light text-xs">
-              {data?.amount} x {data?.post.price.toLocaleString("id-ID", {
+              {data?.amount} x{" "}
+              {data?.post.price.toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               })}
             </p>
           </div>
@@ -74,7 +73,7 @@ const TransactionModal = () => {
               {data?.totalPrice.toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               })}
             </h1>
           </div>
@@ -119,7 +118,7 @@ const TransactionModal = () => {
               {data?.totalPrice.toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               })}
             </p>
           </div>
@@ -129,7 +128,7 @@ const TransactionModal = () => {
               {(0.1 * data?.totalPrice).toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               })}
             </p>
           </div>
@@ -139,7 +138,7 @@ const TransactionModal = () => {
               {(data?.post.price).toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               })}
             </p>
           </div>
@@ -147,10 +146,14 @@ const TransactionModal = () => {
           <div className="flex justify-between">
             <p className="font-semibold">Total Belanja</p>
             <p className="font-semibold">
-              {(data?.totalPrice + (0.1 * data?.totalPrice) + data?.post.price).toLocaleString("id-ID", {
+              {(
+                data?.totalPrice +
+                0.1 * data?.totalPrice +
+                data?.post.price
+              ).toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               })}
             </p>
           </div>
@@ -165,7 +168,7 @@ const TransactionModal = () => {
       title="Detail Transaksi"
       actionLabel="Beri Ulasan"
       onClose={transactionModal.onClose}
-      onSubmit={() => { }}
+      onSubmit={() => {}}
       body={data && bodyContent}
     />
   );

@@ -16,7 +16,7 @@ interface Post {
 export default function Explore({ post }: { post: Post[] }) {
   const router = useRouter();
 
-  const handleCategoryChange = (event) => {
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = event.target.value;
     router.push(`/explore?category=${encodeURIComponent(selectedCategory)}`);
   };
