@@ -58,8 +58,7 @@ interface User {
 
 const ClientProductDetail = ({id, session} : {id:string, session: Session}) => {
 
-  const { data: products, error: productsError } = useSWR<Product>(`http://localhost:3000/api/v1/posts/${id}`, fetcher)
-  const { data, error } = useSWR<Product>(`http://localhost:3000/api/v1/posts/${id}`, fetcher)
+  const { data, error } = useSWR<Product>(process.env.NEXT_PUBLIC_WEB_URL + `/api/v1/posts/${id}`, fetcher)
   
   const [isLiked, setIsLiked] = useState(session?.user?.wishlist.includes(data?.id as string) as boolean);
   const [isFollowed, setIsFollowed] = useState(data?.author.followedByIDs.includes(session?.user?.id));
