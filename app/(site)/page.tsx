@@ -1,22 +1,23 @@
 import Image from "next/image";
 import Landing from "@/app/(site)/components/landing/Landing";
 import Navbar from "../components/Navbar/Navbar";
-import RegisterModal from '../components/Modals/RegisterModal'
-import LoginModal from '../components/Modals/LoginModal'
+import RegisterModal from "../components/Modals/RegisterModal";
+import LoginModal from "../components/Modals/LoginModal";
 import { prisma } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
 import { Session } from "next-auth";
+import Head from "next/head";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions) as Session;
+  const session = (await getServerSession(authOptions)) as Session;
 
   const recommendation = async () => {
     return await prisma.post.findMany({
       where: {
         category: {
           in: session?.user.categoryPilihan,
-        }
+        },
       },
       select: {
         id: true,
@@ -25,15 +26,21 @@ export default async function Home() {
         location: true,
         stock: true,
         imageURLs: true,
-      }
+      },
     });
-  }
+  };
 
   const recommendationProducts = await recommendation();
   return (
     <>
+      <Head>
+        <title>Home | Titipin</title>
+
+        <link rel="icon" href="/logo.svg" />
+      </Head>
       <RegisterModal />
       <LoginModal />
+
       <Landing recommendationProducts={recommendationProducts} />
     </>
   );
