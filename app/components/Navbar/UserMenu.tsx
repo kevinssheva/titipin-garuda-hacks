@@ -8,6 +8,7 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import baju from "../../../public/baju.jpg";
+import { useRouter } from "next/navigation";
 
 export interface currentUserType {
   userName: string;
@@ -28,12 +29,14 @@ const dropDownMenu = [
   {
     label: "Orders",
     icon: AiOutlineShoppingCart,
-    href: "/orders",
+    href: "/transaction/buy",
   },
 ];
 
 const UserMenu = ({ currentUser }: { currentUser: currentUserType }) => {
   const loginModal = useLoginModal();
+  const router = useRouter();
+
   if (Object.keys(currentUser).length === 0) {
     return (
       <div className="lg:flex hidden w-1/12">
@@ -71,7 +74,7 @@ const UserMenu = ({ currentUser }: { currentUser: currentUserType }) => {
           </div>
         </div>
       </div>
-      <button className="px-7 font-semibold bg-mariner-500 text-white rounded-lg">
+      <button className="px-7 font-semibold bg-mariner-500 text-white rounded-lg" onClick={() => router.push("/sell")}>
         Sell
       </button>
     </div>

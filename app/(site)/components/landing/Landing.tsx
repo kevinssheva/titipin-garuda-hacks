@@ -1,64 +1,44 @@
+"use client"
 import Image from "next/image";
 import Categorylanding from "./Categorylanding";
 import Productbox from "./Productbox";
-import { prisma } from "@/app/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/lib/auth";
-import { Session } from "next-auth";
+import { useRouter } from "next/navigation";
 
-export default async function Landing() {
-  const productBoxContent = (
-    <Productbox
-      image="landing/Toys.svg"
-      name="Toys"
-      price="90.000"
-      location="Singapore"
-      rating="4.4"
-      sold="10"
-    />
-  );
+interface recommendationProduct {
+  id: string,
+  title: string,
+  price: number,
+  location: string,
+  stock: number,
+  imageURLs: string[],
+}
 
-  // getserversession
-  const session = await getServerSession(authOptions) as Session;
+interface LandingProps {
+  recommendationProducts: recommendationProduct[]
+}
 
-  const recommendation = async () => {
-    return await prisma.post.findMany({
-      where: {
-        category: {
-          in: session.user.categoryPilihan,
-        }
-      },
-      select: {
-        id: true,
-        title: true,
-        price: true,
-        location: true,
-        stock: true,
-        imageURLs: true,
-      }
-    });
-  }
-
-  const recommendationProducts = await recommendation();
-
+export default function Landing({ recommendationProducts }: LandingProps) {
+  const router = useRouter();
 
   return (
     <div className="p-24 lg:py-40 py-20">
       <div className="lg:flex gap-6 justify-center mb-12 lg:mb-16 block">
-        <Image
-          src="/landing/promo1.jpg"
-          width={875}
-          height={500}
-          alt="promo1"
-          className="rounded-xl lg:w-[50%] mb-6 lg:mb-0"
-        />
-        <Image
-          src="/landing/promo2.jpg"
-          width={875}
-          height={500}
-          alt="promo1"
-          className="rounded-xl lg:w-[50%]"
-        />
+        <div className="rounded-xl lg:w-[50%] mb-6 lg:mb-0 transform transition-transform hover:scale-105">
+          <Image
+            src="/landing/promo1.jpg"
+            width={875}
+            height={500}
+            alt="promo1"
+          />
+        </div>
+        <div className="rounded-xl lg:w-[50%] transform transition-transform hover:scale-105">
+          <Image
+            src="/landing/promo2.jpg"
+            width={875}
+            height={500}
+            alt="promo2"
+          />
+        </div>
       </div>
 
       <h1 className="font-semibold text-xl lg:text-3xl mb-6 text-mariner-500">
@@ -89,8 +69,8 @@ export default async function Landing() {
         {/* {Array.from({ length: 24 }).map((_, index) => (
           <div key={index}>{productBoxContent}</div>
         ))} */}
-        {recommendationProducts.map((product) => (
-          <div key={product.id}>
+        {recommendationProducts.map((product: any) => (
+          <div key={product.id} onClick={() => { router.push(`/product/${product.id}`) }}>
             <Productbox
               image={product.imageURLs[0]}
               name={product.title}
