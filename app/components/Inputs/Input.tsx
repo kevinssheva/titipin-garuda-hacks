@@ -47,8 +47,7 @@ const Input: React.FC<InputProps> = ({
         className={`
           peer
           w-full
-          p-2
-          pt-6 
+          px-3 py-3
           font-light 
           bg-white 
           border-2
@@ -65,17 +64,19 @@ const Input: React.FC<InputProps> = ({
           absolute 
           text-sm
           duration-150 
-          transform 
-          -translate-y-3 
-          top-5 
+          ease-in-out
+          transform
+          top-1/2
+          -translate-y-9
           z-10 
-          origin-[0] 
           text-neutral-500
+          bg-white
+          px-2
           ${formatPrice ? "left-9" : "left-4"}
           peer-placeholder-shown:scale-110 
-          peer-placeholder-shown:translate-y-0
+          peer-placeholder-shown:-translate-y-1/2
           peer-focus:scale-100
-          peer-focus:-translate-y-4
+          peer-focus:-translate-y-9
         `}
       >
         {label}

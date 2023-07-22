@@ -4,10 +4,15 @@ import MobileNav from "./MobileNav";
 import UserMenu from "./UserMenu";
 import Link from "next/link";
 
-const Navbar = () => {
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/auth";
+
+const Navbar = async () => {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
   return (
     <>
-      <div className="fixed flex py-3 inset-x-0 top-0 shadow-xl px-5 md:px-10 items-center justify-center lg:justify-between">
+      <div className="fixed z-50 flex py-3 inset-x-0 top-0 shadow-xl px-5 md:px-10 items-center justify-center lg:justify-between bg-white">
         <Link href="/" className="w-[12%] max-w-[10rem] lg:block hidden">
           <div className="gap-1 xl:gap-2 flex items-center cursor-pointer">
             <Image

@@ -11,24 +11,63 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  secret: process.env.NEXTAUTH_SECRET as string,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      async profile(profile) {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: profile.email,
+          },
+        });
+
+        if(!user) {
+          const createUser = await prisma.user.create({
+            data: {
+              email: profile.email as string,
+              fullName: profile.name as string,
+              password: "google",
+              phoneNumber: '',
+              country: '',
+              region: '',
+            },
+          });
+
+          return {
+            id: createUser.id,
+            email: createUser.email,
+            name: createUser.fullName,
+            image: profile.picture as string,
+          };
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.fullName,
+          image: profile.picture as string,
+        };
+    }
     }),
     CredentialsProvider({
-      name: "Sign in",
+      type:"credentials",
       credentials: {
         email: {
           label: "Email",
           type: "email",
-          placeholder: "example@example.com",
+          placeholder: "Email",
         },
-        password: { label: "Password", type: "password" },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "Password",
+        }
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
-          return null;
+          throw new Error("Email and password are required");
         }
 
         const user = await prisma.user.findUnique({
@@ -38,14 +77,13 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user || !(await compare(credentials.password, user.password))) {
-          return null;
+          throw new Error("Password or email is incorrect");
         }
 
         return {
           id: user.id,
           email: user.email,
-          fullName: user.fullName,
-          randomKey: "randomKey",
+          name: user.fullName,
         };
       },
     }),
@@ -57,7 +95,6 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id,
-          randomKey: token.randomKey,
         },
       };
     },
@@ -67,7 +104,6 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: u.id,
-          randomKey: u.randomKey,
         };
       }
       return token;

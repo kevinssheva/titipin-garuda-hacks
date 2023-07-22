@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Subcategory(props: any) {
   return (
-    <div className="w-44 h-32 items-end flex justify-end">
+    <div className="w-44 h-32 items-end flex justify-end cursor-pointer">
       <Image
         src={props.foto}
         width={176}

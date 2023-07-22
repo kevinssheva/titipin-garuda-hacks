@@ -1,8 +1,7 @@
 "use client";
 
-import { AiFillGithub } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import useLoginModal from "@/app/hooks/useLoginModal";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
@@ -11,8 +10,9 @@ import Modal from "./Modal";
 import Input from "../Inputs/Input";
 import Heading from "../Heading";
 import Button from "../Button";
-import Dropdown from "../Inputs/Dropdown";
+import Dropdown, { DropdownOptionProps } from "../Inputs/Dropdown";
 import { signIn } from "next-auth/react";
+import { Country, State, City } from "country-state-city";
 
 const RegisterModal = () => {
   const registerModal = useRegisterModal();
@@ -23,9 +23,29 @@ const RegisterModal = () => {
     email: "",
     password: "",
     phoneNumber: "",
-    country: "",
-    region: "",
+    country: {
+      code: "",
+      value: "",
+    },
+    region: {
+      code: "",
+      value: "",
+    },
+    city: {
+      code: "",
+      value: "",
+    },
   });
+
+  const countries = Country.getAllCountries();
+
+  const states = useMemo(() => {
+    return State.getStatesOfCountry(userData.country.code);
+  }, [userData.country]);
+
+  const cities = useMemo(() => {
+    return City.getCitiesOfState(userData.country.code, userData.region.code);
+  }, [userData.country, userData.region]);
 
   const onSubmit = () => {};
 
@@ -74,13 +94,62 @@ const RegisterModal = () => {
         onChange={handleChange}
         required
       />
-      <Dropdown
-        name="Country"
-        id="country"
-        value={userData.country}
-        onChange={(e) => setUserData({ ...userData, country: e.target.value })}
-        option={["Indonesia", "Singapore", "Malaysia", "Japan"]}
-      />
+      <div className="flex gap-2">
+        <Dropdown
+          label="Country"
+          value={userData.country}
+          onChange={(newValue: DropdownOptionProps) =>
+            setUserData({
+              ...userData,
+              country: newValue,
+              region: {
+                code: "",
+                value: "",
+              },
+              city: {
+                code: "",
+                value: "",
+              },
+            })
+          }
+          options={countries.map((country) => {
+            return {
+              code: country.isoCode,
+              value: country.name,
+            };
+          })}
+        />
+        <Dropdown
+          label="Country"
+          value={userData.region}
+          onChange={(newValue: DropdownOptionProps) =>
+            setUserData({
+              ...userData,
+              region: newValue,
+              city: { code: "", value: "" },
+            })
+          }
+          options={states.map((state) => {
+            return {
+              code: state.isoCode,
+              value: state.name,
+            };
+          })}
+        />
+        <Dropdown
+          label="Country"
+          value={userData.city}
+          onChange={(newValue: DropdownOptionProps) =>
+            setUserData({ ...userData, city: newValue })
+          }
+          options={cities.map((city) => {
+            return {
+              code: city.stateCode,
+              value: city.name,
+            };
+          })}
+        />
+      </div>
     </div>
   );
 
@@ -91,7 +160,7 @@ const RegisterModal = () => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => {signIn("google");registerModal.onClose();}}
       />
       <div
         className="
