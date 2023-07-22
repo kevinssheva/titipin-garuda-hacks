@@ -3,11 +3,12 @@ import Image from "next/image";
 import baju from "../../public/baju.jpg";
 import Button from "../components/Button";
 import { CiLocationOn } from "react-icons/ci";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Productbox from "../(site)/components/landing/Productbox";
 import { useState } from "react";
 
 const ProductDetail = () => {
+  const [isLiked, setIsLiked] = useState(false);
   const rekomen = (
     <Productbox
       image="/explore/pria/baju.jpg"
@@ -68,7 +69,8 @@ const ProductDetail = () => {
                 <h1 className="text-xl font-semibold">
                   Baju Batik Mickey Mouse
                 </h1>
-                <AiOutlineHeart size={28} className="text-red-500 mr-3" />
+
+                {!isLiked? <AiOutlineHeart size={28} className="text-red-500 mr-3 cursor-pointer" onClick={() => {setIsLiked(true)}}  /> : <AiFillHeart size={28} className="text-red-500 mr-3 cursor-pointer" onClick={() => {setIsLiked(false)}} />}
               </div>
               <p className="text-md tracking-normal">Singapore</p>
               <p className="text-2xl font-bold">Rp 200.000</p>

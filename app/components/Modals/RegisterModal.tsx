@@ -11,10 +11,10 @@ import Input from "../Inputs/Input";
 import Heading from "../Heading";
 import Button from "../Button";
 import Dropdown, { DropdownOptionProps } from "../Inputs/Dropdown";
+import { signIn } from "next-auth/react";
 import { Country, State, City } from "country-state-city";
 
 const RegisterModal = () => {
-  console.log("RegisterModal");
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +40,6 @@ const RegisterModal = () => {
   const countries = Country.getAllCountries();
 
   const states = useMemo(() => {
-    console.log("MEMEK");
     return State.getStatesOfCountry(userData.country.code);
   }, [userData.country]);
 
@@ -161,7 +160,7 @@ const RegisterModal = () => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => {}}
+        onClick={() => {signIn("google");registerModal.onClose();}}
       />
       <div
         className="

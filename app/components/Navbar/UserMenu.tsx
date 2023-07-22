@@ -6,6 +6,9 @@ import { HiOutlineUserCircle } from "react-icons/hi";
 import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
 import { useState } from "react";
+import { signOut } from "next-auth/react";
+import Image from "next/image";
+import baju from "../../../public/baju.jpg";
 
 export interface currentUserType {
   userName: string;
@@ -32,7 +35,7 @@ const dropDownMenu = [
 
 const UserMenu = ({ currentUser }: { currentUser: currentUserType }) => {
   const loginModal = useLoginModal();
-  if (!currentUser) {
+  if (Object.keys(currentUser).length === 0) {
     return (
       <div className="lg:flex hidden w-1/12">
         <button
@@ -44,11 +47,12 @@ const UserMenu = ({ currentUser }: { currentUser: currentUserType }) => {
       </div>
     );
   }
-
   return (
     <div className="lg:flex hidden w-1/6 gap-4">
       <div className="group w-7/12 border-[1.5px] border-black bg-white rounded-full py-1 px-2 flex items-center gap-2 relative">
-        <div className="relative w-7 aspect-square bg-gray-300 rounded-full"></div>
+        <div className="relative w-7 aspect-square bg-gray-300 rounded-full overflow-hidden" >
+          <Image src={currentUser.image ? currentUser.image : baju} alt="profilePicture" fill={true} className="object-cover" />
+        </div>
         <p className="font-normal text-base truncate">
           Hello, <span className="font-semibold">{currentUser.userName}</span>
         </p>
@@ -64,7 +68,7 @@ const UserMenu = ({ currentUser }: { currentUser: currentUserType }) => {
           ))}
           <div className="cursor-pointer w-full flex gap-2 items-center px-3 hover:bg-gray-200 py-2 text-red-500">
             <IoExitOutline size={20} />
-            <p>Logout</p>
+            <p onClick={() => signOut()}>Logout</p>
           </div>
         </div>
       </div>

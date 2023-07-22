@@ -2,8 +2,8 @@
 
 import { useCallback, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { AiFillGithub } from "react-icons/ai";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import useLoginModal from "@/app/hooks/useLoginModal";
@@ -12,6 +12,9 @@ import Modal from "./Modal";
 import Input from "../Inputs/Input";
 import Heading from "../Heading";
 import Button from "../Button";
+import { sign } from "crypto";
+
+import { useSession } from "next-auth/react"
 
 const LoginModal = () => {
   const router = useRouter();
@@ -23,10 +26,24 @@ const LoginModal = () => {
     password: "",
   });
 
-  const onSubmit = () => {};
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [e.target.id]: e.target.value });
+  };
+
+  const onSubmit = async () => {
+    setIsLoading(true);
+    const session = await signIn("credentials", {
+      redirect: false,
+      email: userData.email,
+      password: userData.password,
+    });
+
+    if (session?.error) {
+      alert(session.error);
+    } else {
+      loginModal.onClose();
+    }
+    setIsLoading(false);
   };
 
   const onToggle = useCallback(() => {
@@ -64,7 +81,7 @@ const LoginModal = () => {
         outline
         label="Continue with Google"
         icon={FcGoogle}
-        onClick={() => {}}
+        onClick={() => signIn("google")}
       />
       <div
         className="

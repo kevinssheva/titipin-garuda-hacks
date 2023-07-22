@@ -17,11 +17,12 @@ model User {
   password        String
   phoneNumber     String
   country         String
-  region          String
+  region          String?
+  city            String?
+  profilePicture  String        @default("")
   posts           Post[]
   categoryPilihan String[]      @default([])
-  shoppingCart    String[]      @default([]) // post id
-  wishlist        String[]      @default([]) // post id
+  wishlist        String[]      @default([])
   followedBy      User[]        @relation("UserFollows", fields: [followedByIDs], references: [id])
   followedByIDs   String[]      @default([]) @db.ObjectId
   following       User[]        @relation("UserFollows", fields: [followingIDs], references: [id])
@@ -46,15 +47,16 @@ model Post {
 }
 
 model Transaction {
-  id        String            @id @default(auto()) @map("_id") @db.ObjectId
-  post      Post              @relation(fields: [postId], references: [id])
-  postId    String            @db.ObjectId
-  amount    Int
-  buyer     User              @relation(fields: [buyerId], references: [id])
-  buyerId   String            @db.ObjectId
-  status    TransactionStatus @default(UNPAID)
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  id         String            @id @default(auto()) @map("_id") @db.ObjectId
+  post       Post              @relation(fields: [postId], references: [id])
+  postId     String            @db.ObjectId
+  amount     Int
+  totalPrice Int
+  buyer      User              @relation(fields: [buyerId], references: [id])
+  buyerId    String            @db.ObjectId
+  status     TransactionStatus @default(UNPAID)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
 }
 
 enum TransactionStatus {
