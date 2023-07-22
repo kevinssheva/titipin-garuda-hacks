@@ -52,6 +52,7 @@ const ClientProductDetail = ({ params }: { params: { id: string } }) => {
   const { id } = params;
 
   const { data, error } = useSWR<Product>(`http://localhost:3000/api/v1/posts/${id}`, fetcher)
+  const { data: products, error: productsError } = useSWR<Product>(`http://localhost:3000/api/v1/posts/${id}`, fetcher)
 
   const { data: session } = useSession();
 
