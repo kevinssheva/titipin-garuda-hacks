@@ -47,12 +47,11 @@ const UserMenu = ({ currentUser }: { currentUser: currentUserType }) => {
       </div>
     );
   }
-
   return (
     <div className="lg:flex hidden w-1/6 gap-4">
       <div className="group w-7/12 border-[1.5px] border-black bg-white rounded-full py-1 px-2 flex items-center gap-2 relative">
         <div className="relative w-7 aspect-square bg-gray-300 rounded-full overflow-hidden" >
-          <Image src={currentUser.image || baju} alt="profilePicture" fill={true} className="object-cover" />
+          <Image src={currentUser.image ? currentUser.image : baju} alt="profilePicture" fill={true} className="object-cover" />
         </div>
         <p className="font-normal text-base truncate">
           Hello, <span className="font-semibold">{currentUser.userName}</span>
