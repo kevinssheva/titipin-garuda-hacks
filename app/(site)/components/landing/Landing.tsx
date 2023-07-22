@@ -64,7 +64,7 @@ export default function Landing() {
       </div>
 
       <div className="flex justify-center">
-        <div className="mt-12 bg-mariner-500 p-5 rounded-xl self-center">
+        <div className="mt-12 bg-mariner-500 hover:bg-mariner-600 cursor-pointer p-5 rounded-xl self-center">
           <p className="text-white text-center font-medium">Explore More</p>
         </div>
       </div>

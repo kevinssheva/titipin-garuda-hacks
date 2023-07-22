@@ -6,6 +6,13 @@ import { CiLocationOn } from "react-icons/ci";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Productbox from "../(site)/components/landing/Productbox";
 import { useState } from "react";
+import {
+  BsFillArrowRightCircleFill,
+  BsFillArrowLeftCircleFill,
+} from "react-icons/bs";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import the carousel styles
+import MediaCarousel from "./component/MediaCarousel";
 
 const ProductDetail = () => {
   const [isLiked, setIsLiked] = useState(false);
@@ -24,7 +31,7 @@ const ProductDetail = () => {
   const [jumlah, setJumlah] = useState(2);
 
   return (
-    <div className="flex flex-col items-center justify-center lg:items-start pl-24 py-16">
+    <div className="flex flex-col items-center justify-center lg:items-start px-3 lg:pl-24 py-16">
       <div className="container py-16 px-5 w-full max-w-6xl">
         <div className="mb-2 text-lg lg:col-span-2">
           <span className="cursor-pointer text-mariner-500" onClick={() => {}}>
@@ -35,42 +42,39 @@ const ProductDetail = () => {
             Baju Batik Mickey Mouse
           </span>
         </div>
-        <div className="flex justify-center space-x-2 lg:space-x-1 h-64 rounded-l rounded-r">
-          <div className="relative w-full h-full flex">
-            <Image
-              src={baju}
-              className="object-cover w-full h-full"
-              alt="media"
-              layout="fill"
-            />
-          </div>
-          <div className="relative w-full h-full flex">
-            <Image
-              src={baju}
-              className="object-cover w-full h-full"
-              alt="media"
-              layout="fill"
-            />
-          </div>
-          <div className="relative w-full h-full flex">
-            <Image
-              src={baju}
-              className="object-cover w-full h-full"
-              alt="media"
-              layout="fill"
-            />
-          </div>
-        </div>
+
+        <MediaCarousel media = {[
+          "/explore/pria/baju.jpg",
+          "/explore/pria/glasses.jpg",
+          "/explore/pria/jam.jpg",
+          "/explore/pria/sepatu.jpg",
+        ]}/>
 
         <div className="flex flex-col lg:flex-row py-4">
-          <div className="w-full lg:w-9/12 lg:mr-4">
+          <div className="w-full lg:mr-4">
             <div>
               <div className="flex justify-between">
                 <h1 className="text-xl font-semibold">
                   Baju Batik Mickey Mouse
                 </h1>
 
-                {!isLiked? <AiOutlineHeart size={28} className="text-red-500 mr-3 cursor-pointer" onClick={() => {setIsLiked(true)}}  /> : <AiFillHeart size={28} className="text-red-500 mr-3 cursor-pointer" onClick={() => {setIsLiked(false)}} />}
+                {!isLiked ? (
+                  <AiOutlineHeart
+                    size={28}
+                    className="text-red-500 mr-3 cursor-pointer"
+                    onClick={() => {
+                      setIsLiked(true);
+                    }}
+                  />
+                ) : (
+                  <AiFillHeart
+                    size={28}
+                    className="text-red-500 mr-3 cursor-pointer"
+                    onClick={() => {
+                      setIsLiked(false);
+                    }}
+                  />
+                )}
               </div>
               <p className="text-md tracking-normal">Singapore</p>
               <p className="text-2xl font-bold">Rp 200.000</p>
@@ -99,16 +103,16 @@ const ProductDetail = () => {
                   <div className="w-24 h-24 relative rounded-full overflow-hidden">
                     <Image
                       src={baju}
-                      className="object-cover w-full h-full"
+                      className="object-cover w-4/6 lg:w-full h-full"
                       alt="Profile Picture"
                       layout="fill"
                     />
                   </div>
                   <div className="flex flex-col justify-center ml-4">
-                    <p className="text-md font-semibold tracking-normal">
+                    <p className="text-sm lg:text-md font-semibold tracking-normal">
                       Gibran Fasha
                     </p>
-                    <p className="text-md tracking-normal font-medium opacity-60">
+                    <p className="text-sm lg:text-md tracking-normal font-medium opacity-60">
                       gibranjakarta@gmail.com
                     </p>
                     {/* // logo location */}
@@ -117,31 +121,29 @@ const ProductDetail = () => {
                         size={20}
                         className="text-black opacity-60"
                       />
-                      <p className="text-md tracking-normal opacity-60">
+                      <p className="text-sm lg:text-md tracking-normal opacity-60">
                         Jakarta, Indonesia
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="w-full sm:w-2/12 mt-4 lg:mt-0">
+                <div className="w-1/6 mt-4 lg:mt-0">
                   <Button disabled={false} label="Follow" onClick={() => {}} />
                 </div>
               </div>
             </div>
           </div>
         </div>
-
         <h1 className="font-semibold text-xl mb-3">Related Products</h1>
-
-        <div className="flex gap-8">
+        <div className="flex gap-8 overflow-x-scroll lg:overflow-x-hidden w-full">
           {Array.from({ length: 3 }).map((_, index) => (
             <div key={index}>{rekomen}</div>
           ))}
         </div>
       </div>
 
-      <div className="self-center bg-white w-2/3 lg:w-3/12 border-black border border-opacity-30 rounded-xl px-4 py-2 flex flex-col lg:fixed lg:right-8">
+      <div className="self-center bg-white w-2/3 lg:w-3/12 border-black border border-opacity-30 rounded-xl px-4 py-2 flex flex-col lg:fixed lg:right-8 mb-7 lg:mb-0">
         <p className="text-lg font-semibold">Jumlah</p>
         <div className="py-2 flex items-center">
           <button
