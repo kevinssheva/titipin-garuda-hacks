@@ -19,7 +19,7 @@ const Searchbar = () => {
           placeholder=" "
           id="name"
           type="text"
-          className="peer bg-neutral-100 border-neutral-300 border-[1px] rounded-md py-1 px-2 w-full"
+          className="peer bg-neutral-100 border-neutral-300 border-[1px] rounded-md py-1 px-2 w-full h-12"
         />
         <div className="peer-placeholder-shown:flex hidden absolute items-center gap-1 text-neutral-300 top-1/2 -translate-y-1/2 left-2">
           <FaSearch />
