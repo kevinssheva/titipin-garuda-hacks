@@ -1,19 +1,25 @@
-import Image from "next/image";
-import Subcategory from "./Subcategory";
-import { useState } from "react";
-import Productbox from "@/app/(site)/components/landing/Productbox";
+"use client"
 
-export default function Explore() {
-  const listproduct = (
-    <Productbox
-      image="/explore/pria/baju.jpg"
-      name="Baju"
-      price="90.000"
-      location="Singapore"
-      rating="4.4"
-      sold="10"
-    />
-  );
+import Subcategory from "./Subcategory";
+import Productbox from "@/app/(site)/components/landing/Productbox";
+import { useRouter } from "next/navigation";
+
+interface Post {
+  id: string;
+  title: string;
+  price: number;
+  location: string;
+  imageURLs: string[];
+  stock: number;
+}
+
+export default function Explore({ post }: { post: Post[] }) {
+  const router = useRouter();
+
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCategory = event.target.value;
+    router.push(`/explore?category=${encodeURIComponent(selectedCategory)}`);
+  };
 
   return (
     <>
@@ -34,14 +40,14 @@ export default function Explore() {
 
       <div className="flex gap-5">
         <div className="mt-12 p-3 rounded-full border border-mariner-500 w-44">
-          <select className="text-mariner-500">
+          <select className="text-mariner-500" onChange={handleCategoryChange}>
             <option value="Men Fashion">Men Fashion</option>
             <option value="Women Fashion">Woman Fashion</option>
             <option value="Electronics">Electronics</option>
             <option value="FnB">FnB</option>
             <option value="Cosmetic">Cosmetic</option>
             <option value="Sports">Sports</option>
-            <option value="Art & Craft">Art & Craft</option>
+            <option value="Art and Craft">Art and Craft</option>
             <option value="Toys">Toys</option>
             <option value="Shoes">Shoes</option>
             <option value="Books">Books</option>
@@ -59,8 +65,20 @@ export default function Explore() {
       </div>
 
       <div className="flex-wrap flex gap-8 mt-12">
-        {Array.from({ length: 24 }).map((_, index) => (
-          <div key={index}>{listproduct}</div>
+        {post.map((product, index) => (
+          <div key={index}>
+            <Productbox
+              image={product.imageURLs[0]}
+              name={product.title}
+              price={product.price.toLocaleString("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0
+              })}
+              location={product.location}
+              sold={product.stock}
+            />
+          </div>
         ))}
       </div>
     </>
