@@ -5,20 +5,16 @@ import Button from "@/app/components/Button";
 import { CiLocationOn } from "react-icons/ci";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import Productbox from "@/app/(site)/components/landing/Productbox";
-import { useEffect, useState } from "react";
-import {
-  BsFillArrowRightCircleFill,
-  BsFillArrowLeftCircleFill,
-} from "react-icons/bs";
-import { Carousel } from "react-responsive-carousel";
+import { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import the carousel styles
 import MediaCarousel from "./MediaCarousel";
+import toast from "react-hot-toast";
 import useSWR from "swr";
 import fetcher from "@/app/lib/fetcher";
-
-import { add, format, formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import idLocale from 'date-fns/locale/id';
 import { Session } from "next-auth";
+import { useRouter } from "next/navigation";
 
 interface Product {
   id: string;
@@ -48,27 +44,28 @@ interface User {
   followedByIDs: string[];
 }
 
-// interface SignedUser {
-//     id: string;
-//     name: string;
-//     email: string;
-//     image: string;
-//     wishlist: string[];
-// }
-
-const ClientProductDetail = ({id, session} : {id:string, session: Session}) => {
+const ClientProductDetail = ({ id, session }: { id: string, session: Session }) => {
 
   const { data, error } = useSWR<Product>(process.env.NEXT_PUBLIC_WEB_URL + `/api/v1/posts/${id}`, fetcher)
-  
+
   const [isLiked, setIsLiked] = useState(session?.user?.wishlist.includes(data?.id as string) as boolean);
   const [isFollowed, setIsFollowed] = useState(data?.author.followedByIDs.includes(session?.user?.id));
+  const [jumlah, setJumlah] = useState(1);
+  const router = useRouter();
 
+  if (error) {
+    return <div>Error loading data.</div>;
+  }
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   const rekomen = (
     <Productbox
       image="/explore/pria/baju.jpg"
-      name="Baju"
-      price="90.000"
+      name="NY T-Shirt Limited Edition"
+      price="900.000"
       location="Singapore"
       rating="4.4"
       sold="10"
@@ -89,7 +86,7 @@ const ClientProductDetail = ({id, session} : {id:string, session: Session}) => {
       // // ubah true ke false atau false ke true 
       setIsLiked(isLiked => !isLiked)
       // session?.user?.wishlist.includes(data?.id)
-    } catch(err) {
+    } catch (err) {
       console.log(err)
     }
 
@@ -106,11 +103,11 @@ const ClientProductDetail = ({id, session} : {id:string, session: Session}) => {
     });
 
     const data = await res.json();
-    if(data.message) {
+    if (data.message) {
       setIsFollowed(true)
     }
   }
-  
+
   const unfollow = async (user: Product, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
 
@@ -122,7 +119,7 @@ const ClientProductDetail = ({id, session} : {id:string, session: Session}) => {
     });
 
     const data = await res.json();
-    if(data.message) {
+    if (data.message) {
       setIsFollowed(false)
     }
   }
@@ -139,14 +136,48 @@ const ClientProductDetail = ({id, session} : {id:string, session: Session}) => {
     }
   };
 
-  const [jumlah, setJumlah] = useState(1);
+  const handleTitip = async () => {
+    const payload = {
+      postId: id,
+      buyerId: session?.user?.id,
+      amount: jumlah,
+    }
 
-  if (error) {
-    return <div>Error loading data.</div>;
-  }
+    try {
+      const res = await fetch(`/api/v1/transactions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      });
 
-  if (!data) {
-    return <div>Loading...</div>;
+      const data = await res.json();
+    } catch (err) {
+      console.log(err)
+    }
+
+    // Update product's stock
+    try {
+      const res = await fetch(`/api/v1/posts/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ stock: data.stock - jumlah })
+      });
+
+      const dataRes = await res.json();
+
+      if (dataRes.message) {
+        toast.success("Product successfully 'titip'ed");
+        setTimeout(() => {
+          router.push("/transaction/buy");
+        }, 2500);
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
@@ -252,9 +283,9 @@ const ClientProductDetail = ({id, session} : {id:string, session: Session}) => {
                 {session?.user && (
                   <div className="w-1/6 mt-4 lg:mt-0">
                     {isFollowed ? (
-                      <Button disabled={false} label="Unfollow" onClick={(e) => {unfollow(data, e)}} outline />
-                      ) : (
-                      <Button disabled={false} label="Follow" onClick={(e) => {follow(data, e)}} />
+                      <Button disabled={false} label="Unfollow" onClick={(e) => { unfollow(data, e) }} outline />
+                    ) : (
+                      <Button disabled={false} label="Follow" onClick={(e) => { follow(data, e) }} />
                     )}
                   </div>
                 )}
@@ -312,7 +343,7 @@ const ClientProductDetail = ({id, session} : {id:string, session: Session}) => {
           </p>
         </div>
         <div className="w-full">
-          <Button disabled={false} label="Titipin" onClick={() => { }} />
+          <Button disabled={false} label="Titipin" onClick={handleTitip} />
         </div>
       </div>
     </div>
