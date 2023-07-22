@@ -32,7 +32,7 @@ const ProductDetail = () => {
 
   return (
     <div className="flex flex-col items-center justify-center lg:items-start px-3 lg:pl-24 py-16">
-      <div className="container py-16 px-5 w-full max-w-6xl">
+      <div className="container py-16 px-5 xl:w-2/3 max-w-6xl">
         <div className="mb-2 text-lg lg:col-span-2">
           <span className="cursor-pointer text-mariner-500" onClick={() => {}}>
             {"Men's"} Fashion
@@ -43,12 +43,14 @@ const ProductDetail = () => {
           </span>
         </div>
 
-        <MediaCarousel media = {[
-          "/explore/pria/baju.jpg",
-          "/explore/pria/glasses.jpg",
-          "/explore/pria/jam.jpg",
-          "/explore/pria/sepatu.jpg",
-        ]}/>
+        <MediaCarousel
+          media={[
+            "/explore/pria/baju.jpg",
+            "/explore/pria/glasses.jpg",
+            "/explore/pria/jam.jpg",
+            "/explore/pria/sepatu.jpg",
+          ]}
+        />
 
         <div className="flex flex-col lg:flex-row py-4">
           <div className="w-full lg:mr-4">
@@ -143,7 +145,7 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      <div className="self-center bg-white w-2/3 lg:w-3/12 border-black border border-opacity-30 rounded-xl px-4 py-2 flex flex-col lg:fixed lg:right-8 mb-7 lg:mb-0">
+      <div className="self-center bg-white xl:w-3/12 border-black border border-opacity-30 rounded-xl px-4 py-2 flex flex-col xl:fixed xl:right-24 xl:top-40 mb-7 xl:mb-0">
         <p className="text-lg font-semibold">Jumlah</p>
         <div className="py-2 flex items-center">
           <button
