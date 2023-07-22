@@ -1,8 +1,8 @@
 import { prisma } from "@/app/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-    const { userId, postId } = await req.json();
+export async function PATCH(req: NextRequest, { params }: { params: { userId: string, productId: string } }) {
+    const { userId, productId } = params;
     try {
         const user = await prisma.user.findUnique({
             where: {
@@ -14,9 +14,9 @@ export async function POST(req: NextRequest) {
         });
 
         if (!user) {
-            return NextResponse.json({ message: "User not found." }, { status: 404 });
+            throw new Error("User not found.")
         }
-        const itemIndex = user.wishlist.findIndex((post) => post === postId);
+        const itemIndex = user.wishlist.findIndex((post) => post === productId);
         if (itemIndex === -1) {
             await prisma.user.update({
                 where: {
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
                 },
                 data: {
                     wishlist: {
-                        push: postId
+                        push: productId
                     }
                 }
             })
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
                 },
                 data: {
                     wishlist: {
-                        set: user.wishlist.filter((post) => post !== postId) // remove the post from wishlist
+                        set: user.wishlist.filter((post) => post !== productId)
                     }
                 }
             })

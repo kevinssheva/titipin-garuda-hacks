@@ -41,6 +41,7 @@ export const authOptions: NextAuthOptions = {
             email: createUser.email,
             name: createUser.fullName,
             image: createUser.profilePicture as string,
+            wishlist: createUser.wishlist,
           };
         }
 
@@ -49,6 +50,7 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.fullName,
           image: user.profilePicture as string,
+          wishlist: user.wishlist,
         };
     }
     }),
@@ -85,19 +87,38 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.fullName,
+          image: user.profilePicture as string,
+          wishlist: user.wishlist,
         };
       },
     }),
   ],
   callbacks: {
-    session: ({ session, token }) => {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-        },
-      };
+    session: async ({ session, token }) => {
+      // Fetch the user data from the database based on the user ID in the token
+      if (token && token.id) {
+        const user = await prisma.user.findUnique({
+          where: {
+            id: token.id as string,
+          },
+        });
+
+        // If the user is found, add the 'id' and 'wishlist' fields to the session user
+        if (user) {
+          const updatedSession = {
+            ...session,
+            user: {
+              ...session.user,
+              id: user.id,
+              wishlist: user.wishlist,
+            },
+          };
+
+          return updatedSession;
+        }
+      }
+
+      return session;
     },
     jwt: ({ token, user }) => {
       if (user) {

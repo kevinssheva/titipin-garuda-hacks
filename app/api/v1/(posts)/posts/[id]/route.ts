@@ -12,6 +12,20 @@ export async function GET(
       where: {
         id: id,
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            fullName: true,
+            email: true,
+            city: true,
+            country: true,
+            profilePicture: true,
+            followedByIDs: true,
+            wishlist: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json(post);
