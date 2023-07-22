@@ -22,6 +22,7 @@ export async function GET(
             country: true,
             profilePicture: true,
             followedByIDs: true,
+            wishlist: true,
           },
         },
       },
