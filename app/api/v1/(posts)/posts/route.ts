@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
         location,
         estimatedTime,
         category,
+        subCategory,
         imageURLs,
         authorId
     } = await req.json();
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
                 location,
                 estimatedTime,
                 category,
+                subCategory,
                 imageURLs,
                 authorId
             },
