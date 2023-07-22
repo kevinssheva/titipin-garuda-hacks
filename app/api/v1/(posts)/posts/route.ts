@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     const {
         title,
+        description,
         stock,
         price,
         location,
@@ -18,6 +19,7 @@ export async function POST(req: NextRequest) {
         await prisma.post.create({
             data: {
                 title,
+                description,
                 stock,
                 price,
                 location,
