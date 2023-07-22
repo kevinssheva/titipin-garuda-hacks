@@ -1,20 +1,21 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Categorylanding from "./Categorylanding";
 import Productbox from "./Productbox";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface recommendationProduct {
-  id: string,
-  title: string,
-  price: number,
-  location: string,
-  stock: number,
-  imageURLs: string[],
+  id: string;
+  title: string;
+  price: number;
+  location: string;
+  stock: number;
+  imageURLs: string[];
 }
 
 interface LandingProps {
-  recommendationProducts: recommendationProduct[]
+  recommendationProducts: recommendationProduct[];
 }
 
 export default function Landing({ recommendationProducts }: LandingProps) {
@@ -70,25 +71,33 @@ export default function Landing({ recommendationProducts }: LandingProps) {
           <div key={index}>{productBoxContent}</div>
         ))} */}
         {recommendationProducts.map((product: any) => (
-          <div key={product.id} onClick={() => { router.push(`/product/${product.id}`) }}>
+          <div
+            key={product.id}
+            onClick={() => {
+              router.push(`/product/${product.id}`);
+            }}
+          >
             <Productbox
               image={product.imageURLs[0]}
               name={product.title}
               price={product.price.toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               })}
               location={product.location}
               sold={product.stock}
-            /></div>
+            />
+          </div>
         ))}
       </div>
 
       <div className="flex justify-center">
-        <div className="mt-12 bg-mariner-500 hover:bg-mariner-600 cursor-pointer p-5 rounded-xl self-center">
-          <p className="text-white text-center font-medium">Explore More</p>
-        </div>
+        <Link href="/explore">
+          <div className="mt-12 bg-mariner-500 hover:bg-mariner-600 cursor-pointer p-5 rounded-xl self-center">
+            <p className="text-white text-center font-medium">Explore More</p>
+          </div>
+        </Link>
       </div>
     </div>
   );

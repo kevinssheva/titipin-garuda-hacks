@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Subcategory from "./Subcategory";
 import Productbox from "@/app/(site)/components/landing/Productbox";
@@ -16,7 +16,9 @@ interface Post {
 export default function Explore({ post }: { post: Post[] }) {
   const router = useRouter();
 
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const selectedCategory = event.target.value;
     router.push(`/explore?category=${encodeURIComponent(selectedCategory)}`);
   };
@@ -25,7 +27,9 @@ export default function Explore({ post }: { post: Post[] }) {
     <>
       <h3 className="text-2xl font-light mb-8">Mens Fashion</h3>
 
-      <h1 className="text-3xl mb-8 text-mariner-500 font-semibold">Jastip Mens Fashion</h1>
+      <h1 className="text-3xl mb-8 text-mariner-500 font-semibold">
+        Jastip Mens Fashion
+      </h1>
       <p className="font-light text-2xl mb-6">
         Yuk titip barang yang kamu mau!
       </p>
@@ -66,14 +70,17 @@ export default function Explore({ post }: { post: Post[] }) {
 
       <div className="flex-wrap flex gap-8 mt-12">
         {post.map((product, index) => (
-          <div key={index}>
+          <div
+            key={index}
+            onClick={() => router.push(`/product/${product.id}`)}
+          >
             <Productbox
               image={product.imageURLs[0]}
               name={product.title}
               price={product.price.toLocaleString("id-ID", {
                 style: "currency",
                 currency: "IDR",
-                minimumFractionDigits: 0
+                minimumFractionDigits: 0,
               })}
               location={product.location}
               sold={product.stock}
