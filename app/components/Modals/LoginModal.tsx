@@ -26,8 +26,6 @@ const LoginModal = () => {
     password: "",
   });
 
-  const { data: session } = useSession()
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, [e.target.id]: e.target.value });
   };
@@ -90,7 +88,7 @@ const LoginModal = () => {
       text-neutral-500 text-center mt-4 font-light"
       >
         <p>
-          First time using titipin?
+          First time using Titipin?
           <span
             onClick={onToggle}
             className="

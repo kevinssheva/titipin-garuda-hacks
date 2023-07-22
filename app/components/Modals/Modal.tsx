@@ -34,6 +34,11 @@ const Modal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     setShowModal(isOpen);
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
   }, [isOpen]);
 
   const handleClose = useCallback(() => {
@@ -77,8 +82,8 @@ const Modal: React.FC<ModalProps> = ({
           overflow-x-hidden 
           overflow-y-auto 
           fixed 
-          inset-0 
-          z-50 
+          inset-0
+          z-50
           outline-none 
           focus:outline-none
           bg-neutral-800/70

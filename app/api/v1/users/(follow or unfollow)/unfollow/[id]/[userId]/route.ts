@@ -4,22 +4,24 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PATCH(req: NextRequest, { params }: { params: { id: string, userId: string } }) {
     const { id, userId } = params;
 
-    // add follower (userId) to user (id)
+    // remove follower (userId) from user (id)
     try {
-        const user = await prisma.user.update({
+        await prisma.user.update({
             where: {
                 id
             },
             data: {
-                followers: {
-                    connect: {
+                followedBy: {
+                    disconnect: {
                         id: userId
                     }
-                }
+                },
+
             }
         });
 
-        return NextResponse.json(user);
+        return NextResponse.json({ message: "User successfully unfollowed" });
+    } catch (err) {
+        return NextResponse.json({ error: err }, { status: 500 });
     }
-
-    
+}

@@ -28,6 +28,7 @@ export const authOptions: NextAuthOptions = {
             data: {
               email: profile.email as string,
               fullName: profile.name as string,
+              profilePicture: profile.image as string,
               password: "google",
               phoneNumber: '',
               country: '',
@@ -39,7 +40,7 @@ export const authOptions: NextAuthOptions = {
             id: createUser.id,
             email: createUser.email,
             name: createUser.fullName,
-            image: profile.picture as string,
+            image: createUser.profilePicture as string,
           };
         }
 
@@ -47,7 +48,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.fullName,
-          image: profile.picture as string,
+          image: user.profilePicture as string,
         };
     }
     }),
