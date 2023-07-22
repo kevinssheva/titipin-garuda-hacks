@@ -9,9 +9,9 @@ import Image from "next/image";
 
 const TransactionModal = () => {
   const transactionModal = useTransactionModal();
-  const data: TransactionCardProps = transactionModal.data;
+  const data: TransactionCardProps | null = transactionModal.data;
 
-  const date = new Date(data?.updatedAt)
+  const date = new Date(data?.updatedAt as Date)
   const year = date.getFullYear();
   const day = String(date.getDate()).padStart(2, '0');
   const month = String(date.getMonth() + 1).padStart(2, '0');

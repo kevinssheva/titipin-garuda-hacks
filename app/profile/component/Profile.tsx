@@ -39,9 +39,8 @@ function formatNumber(number: number) {
 
 export default function Profile({ user }: { user: User }) {
   const { data: usersData } = useSWR(process.env.NEXT_PUBLIC_WEB_URL + `/api/v1/users/${user?.id}`, fetcher);
-  const { data: productsData } = useSWR(process.env.NEXT_PUBLIC_WEB_URL + `/api/v1/all-post/${user?.id}`, fetcher);
+  const { data: productsData, isLoading } = useSWR(process.env.NEXT_PUBLIC_WEB_URL + `/api/v1/all-post/${user?.id}`, fetcher);
   const router = useRouter();
-
   return (
     <div className="relative pt-20">
       <div className="bg-mariner-300 w-full h-28 absolute top-0"></div>
@@ -50,7 +49,7 @@ export default function Profile({ user }: { user: User }) {
         <div className="">
           <div className="border-4 border-white relative w-36 aspect-square rounded-full overflow-hidden">
             <Image
-              src="/baju.jpg"
+              src={usersData?.profilePicture}
               fill
               alt="profile"
               className="object-cover object-center"
@@ -58,14 +57,14 @@ export default function Profile({ user }: { user: User }) {
           </div>
           <h1 className="text-3xl mt-2 font-light">{usersData?.fullName}</h1>
 
-          <div className="flex gap-4 mt-4">
+          <div className="flex gap-4 mt-2">
             <AiFillStar className="text-yellow-500 text-2xl" />
             <p>4.4 dari 5.0</p>
           </div>
 
           {usersData ? (
             <>
-              <p className="text-gray-500 mt-4">
+              <p className="text-gray-500 mt-2">
                 {usersData?.city || "Semarang" + ", " + (usersData?.country.length !== 0 ? usersData?.country : "Indonesia")} <br /> Joined {usersData?.createdAt.split("T")[0].split("-")[0]}{" "}
               </p>
 
@@ -88,7 +87,7 @@ export default function Profile({ user }: { user: User }) {
           </div>
 
           <div className="flex flex-wrap gap-8 justify-center">
-            {productsData ? productsData.length > 0 ? productsData.map((value: Product, index: number) => (
+            {isLoading ? (<div>Loading...</div>) : (productsData ? productsData.map((value: Product, index: number) => (
               <div key={index} onClick={() => { router.push(`/product/${value?.id}`) }}>
                 <Productbox
                   id={value?.id}
@@ -102,9 +101,7 @@ export default function Profile({ user }: { user: User }) {
               </div>
             )) : (
               <div className="">Kamu belum memiliki titipan.</div>
-            ) : (
-              <div>Loading...</div>
-            )}
+            ))}
           </div>
         </div>
       </div>

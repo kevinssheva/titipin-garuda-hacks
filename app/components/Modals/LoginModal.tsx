@@ -34,6 +34,7 @@ const LoginModal = () => {
     setIsLoading(true);
     const session = await signIn("credentials", {
       redirect: false,
+      callbackUrl: "/",
       email: userData.email,
       password: userData.password,
     });
