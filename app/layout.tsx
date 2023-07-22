@@ -2,6 +2,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Navbar from "./components/Navbar/Navbar";
+import LoginModal from "./components/Modals/LoginModal";
+import RegisterModal from "./components/Modals/RegisterModal";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -21,9 +23,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Navbar />
+        <LoginModal />
+        <RegisterModal />
+        <Navbar
+          currentUser={{
+            userName: "test",
+            image: "",
+          }}
+        />
         {children}
-        </body>
+      </body>
     </html>
   );
 }
